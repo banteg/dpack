@@ -1,11 +1,11 @@
-from typing import Literal
-
 import json
-from pydantic import BaseModel, constr
-import httpx
-from ethpm_types import ContractType
 import os
 from functools import cache
+from typing import Literal
+
+import httpx
+from ethpm_types import ContractType
+from pydantic import BaseModel, constr
 
 IPFS_RPC_URL = os.environ.get("IPFS_RPC_URL", "http://127.0.0.1:5001")
 
@@ -41,13 +41,3 @@ class Dpack(BaseModel):
     network: str
     types: dict[str, DpackType]
     objects: dict[str, DpackObject]
-
-
-if __name__ == "__main__":
-    from rich import print
-    from rich.rule import Rule
-
-    pack = Dpack.model_validate_json(open("weth_ropsten.dpack.json").read())
-    print(pack)
-    print(pack.types["WETH9"].contract_type)
-    print(Rule("done"))
