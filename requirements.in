@@ -3,3 +3,5 @@ ruff>=0.4
 rich
 httpx
 ethpm-types
+pytest
+flit

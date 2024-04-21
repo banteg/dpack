@@ -7,7 +7,6 @@ from ethpm_types import ContractType
 import os
 from functools import cache
 
-
 IPFS_RPC_URL = os.environ.get("IPFS_RPC_URL", "http://127.0.0.1:5001")
 
 

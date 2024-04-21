@@ -1,2 +1,14 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "dpack"
+authors = [{name = "banteg"}]
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+version = "0.1.0"
+description = "dpack is an evm artifact package format"
+
 [tool.ruff]
 line-length = 100

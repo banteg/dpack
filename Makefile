@@ -3,3 +3,4 @@ requirements.txt: requirements.in
 
 install: requirements.txt
 	uv pip sync requirements.txt
+	uv pip install -e .
