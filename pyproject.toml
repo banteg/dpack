@@ -4,11 +4,16 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "dpack"
-authors = [{name = "banteg"}]
-license = {file = "LICENSE"}
+authors = [{ name = "banteg" }]
+license = { file = "LICENSE" }
 classifiers = ["License :: OSI Approved :: MIT License"]
 version = "0.1.0"
 description = "dpack is an evm artifact package format"
+requires-python = ">=3.9"
+dependencies = ["pydantic >=2", "httpx", "ethpm-types"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
 
 [tool.ruff]
 line-length = 100
