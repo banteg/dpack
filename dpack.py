@@ -4,7 +4,7 @@ from functools import cache
 from typing import Literal
 
 import httpx
-from ethpm_types import ContractType
+from ethpm_types import ContractInstance, ContractType
 from pydantic import BaseModel, constr
 
 IPFS_RPC_URL = os.environ.get("IPFS_RPC_URL", "http://127.0.0.1:5001")
@@ -35,9 +35,23 @@ class DpackObject(DpackArtifact):
     address: constr(pattern=r"0x[a-zA-Z0-9]{40}")
     typename: constr(pattern=r"[A-Z]\w*")
 
+    @property
+    def contract_instance(self):
+        return ContractInstance.model_validate(
+            {
+                "contractType": self.typename,
+                "address": self.address,
+                "name": self.objectname,
+            }
+        )
+
 
 class Dpack(BaseModel):
     format: Literal["dpack-1"]
     network: str
     types: dict[str, DpackType]
     objects: dict[str, DpackObject]
+
+
+def load(path) -> Dpack:
+    return Dpack.model_validate_json(open(path).read())
