@@ -52,6 +52,13 @@ class Dpack(BaseModel):
     types: dict[str, DpackType]
     objects: dict[str, DpackObject]
 
+    def __getattr__(self, name):
+        if name in self.objects:
+            return self.objects[name].contract_instance
+
+    def __dir__(self):
+        return super().__dir__() + sorted(self.objects.keys())
+
 
 def load(path) -> Dpack:
     return Dpack.model_validate_json(open(path).read())

@@ -39,3 +39,12 @@ def test_instance(pack):
     instance = pack.objects["weth"].contract_instance
     print(instance)
     assert instance.contract_type == "WETH9"
+
+
+def test_getattr(pack):
+    assert pack.weth == pack.objects["weth"].contract_instance
+
+
+def test_dir(pack):
+    print(dir(pack))
+    assert {"weth", "weth9"} & set(dir(pack))
