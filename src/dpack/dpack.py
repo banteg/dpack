@@ -1,11 +1,12 @@
 import json
 import os
 from functools import cache
+import tempfile
 from typing import Literal
 
 import httpx
 from ethpm_types import ContractInstance, ContractType
-from pydantic import BaseModel, constr
+from pydantic import BaseModel, Field, constr
 from pathlib import Path
 
 IPFS_RPC_URL = os.environ.get("IPFS_RPC_URL", "http://127.0.0.1:5001")
@@ -19,7 +20,10 @@ def fetch_artifact(cid):
     return resp
 
 
-def upload_artifact(path: Path) -> IpfsCid:
+def upload_artifact(path: Path | str) -> IpfsCid:
+    if isinstance(path, str):
+        path = Path(path)
+    assert path.is_file(), "provide a valid path"
     resp = httpx.post(
         f"{IPFS_RPC_URL}/api/v0/add",
         params={"cid-version": 1},
@@ -38,7 +42,7 @@ class DpackArtifact(BaseModel):
         return ContractType.model_validate(payload)
 
     @classmethod
-    def from_path(cls, *, path, **fields):
+    def from_path(cls, path: Path, **fields):
         cid = upload_artifact(path)
         return cls.model_validate(dict(artifact={"/": cid}, **fields))
 
@@ -54,20 +58,16 @@ class DpackObject(DpackArtifact):
 
     @property
     def contract_instance(self):
-        return ContractInstance.model_validate(
-            {
-                "contractType": self.typename,
-                "address": self.address,
-                "name": self.objectname,
-            }
+        return ContractInstance(
+            contractType=self.typename, name=self.objectname, address=self.address
         )
 
 
 class Dpack(BaseModel):
-    format: Literal["dpack-1"]
+    format: Literal["dpack-1"] = "dpack-1"
     network: str
-    types: dict[str, DpackType]
-    objects: dict[str, DpackObject]
+    types: dict[str, DpackType] = {}
+    objects: dict[str, DpackObject] = {}
 
     def __getattr__(self, name):
         if name in self.objects:
@@ -76,40 +76,18 @@ class Dpack(BaseModel):
     def __dir__(self):
         return super().__dir__() + sorted(self.objects.keys())
 
-
-class PackBuilder(BaseModel):
-    network: str
-    types: dict[str, Path] = {}
-    objects: dict[str, dict] = {}
-
-    def pack_type(self, *, typename, artifact):
-        self.types[typename] = Path(str(artifact))
+    def pack_type(self, path: Path, typename: str):
+        self.types[typename] = DpackType.from_path(path, typename=typename)
         return self
 
-    def pack_object(self, *, typename, artifact, objectname, address):
+    def pack_object(self, path: Path, typename: str, objectname: str, address: str):
         if typename not in self.types:
-            self.types[typename] = Path(str(artifact))
-        self.objects[objectname] = {"typename": typename, "address": address}
+            self.pack_type(path, typename)
+        self.objects[objectname] = DpackObject.from_path(
+            path, typename=typename, objectname=objectname, address=address
+        )
         return self
-
-    def build(self):
-        pack = Dpack(format="dpack-1", network=self.network, types={}, objects={})
-        for type, path in self.types.items():
-            pack.types[type] = DpackType.from_path(path=path, typename=type)
-        for obj, data in self.objects.items():
-            pack.objects[obj] = DpackObject.from_path(
-                path=self.types[data["typename"]],
-                objectname=obj,
-                address=data["address"],
-                typename=data["typename"],
-            )
-
-        return pack
 
 
 def load(path) -> Dpack:
     return Dpack.model_validate_json(open(path).read())
-
-
-def builder(network) -> PackBuilder:
-    return PackBuilder(network=network)
