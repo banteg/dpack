@@ -67,7 +67,7 @@ pack = (
 to save a dpack to a json file, simply call `save` with a file path.
 
 ```python
-pack.save('weth.ropsten.dpack.json')
+pack.save('weth.sepolia.dpack.json')
 ```
 
 you may pack as many objects and types as you wish, but note that the current version of the format (`dpack-1`) specifies the network at top level, so you cannot make multichain dpacks yet.
