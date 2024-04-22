@@ -52,7 +52,7 @@ class DpackType(DpackArtifact):
 
 
 class DpackObject(DpackArtifact):
-    objectname: str
+    objectname: constr(pattern=r"[a-z]\w*")
     address: constr(pattern=r"0x[a-zA-Z0-9]{40}")
     typename: constr(pattern=r"[A-Z]\w*")
 
