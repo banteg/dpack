@@ -16,7 +16,7 @@ dependencies = ["pydantic >=2", "httpx", "ethpm-types"]
 name = "dpack"
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "eth-ape", "ape-etherscan", "setuptools"]
+dev = ["pytest", "ruff", "eth-ape", "ape-etherscan", "setuptools", "flit"]
 
 [tool.ruff]
 line-length = 100
