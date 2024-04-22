@@ -89,6 +89,11 @@ class Dpack(BaseModel):
         )
         return self
 
+    def save(self, path: str | Path):
+        if isinstance(path, str):
+            path = Path(path)
+        path.write_text(self.model_dump_json(indent=2))
+
 
 def load(path) -> Dpack:
     return Dpack.model_validate_json(open(path).read())
