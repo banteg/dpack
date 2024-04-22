@@ -22,7 +22,7 @@ to set up the extra libraries useful for development:
 
 ```sh
 uv venv
-make install
+make dev
 ```
 
 ## load a dpack
