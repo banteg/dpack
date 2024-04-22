@@ -72,6 +72,7 @@ class Dpack(BaseModel):
     def __getattr__(self, name):
         if name in self.objects:
             return self.objects[name].contract_instance
+        raise AttributeError()
 
     def __dir__(self):
         return super().__dir__() + sorted(self.objects.keys())

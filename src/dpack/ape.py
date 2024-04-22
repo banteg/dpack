@@ -22,7 +22,9 @@ class ApeDpack(BaseModel):
         }
 
     def __getattr__(self, name):
-        return self.contract_instances.get(name)
+        if name in self.contract_instances:
+            return self.contract_instances[name]
+        raise AttributeError()
 
     def __dir__(self):
         return super().__dir__() + sorted(self.contract_instances.keys())
