@@ -1,7 +1,8 @@
-import dpack
-from pydantic import BaseModel
-from ethpm_types.contract_type import ContractType
 from ape.contracts.base import ContractInstance  # NOTE: different from ethpm
+from ethpm_types.contract_type import ContractType
+from pydantic import BaseModel
+
+import dpack
 
 
 class ApeDpack(BaseModel):
