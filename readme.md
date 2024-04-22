@@ -72,19 +72,35 @@ pack.save('weth.sepolia.dpack.json')
 
 you may pack as many objects and types as you wish, but note that the current version of the format (`dpack-1`) specifies the network at top level, so you cannot make multichain dpacks yet.
 
-## use with ape
+## use dpack in ape
 
 this library also provides an easy wrapper that loads up objects as ape contract instances, so you can interact with them right away.
+
+`types` are exposed as a provider-aware wrapper [ContractContainer](https://github.com/ApeWorX/ape/blob/c2f1bc48c1afe3297a63e4e820dbfb751b90c932/src/ape/contracts/base.py#L1238). `objects` are ready-to-use [ContractInstance](https://github.com/ApeWorX/ape/blob/c2f1bc48c1afe3297a63e4e820dbfb751b90c932/src/ape/contracts/base.py#L815).
+
+types can be also accessed with a subscript shorthand like `pack["MyType"]`. you can an address to a type with `.at(address)`, which returns a `ContractInstance`.
+
+objects can be also accessed with an attribute shorthand like `pack.my_contract`.
 
 ```python
 $ ape console --netwowrk ethereum:mainnet
 
-from ape_tokens import tokens
 import dpack.ape
 
-uniswap = dpack.ape.load("examples/uniswap-v3.dpack.json")
+pack = dpack.ape.load('examples/uniswap-v3.dpack.json')
+# <ApeDpack types=['UniswapV3Factory', 'UniswapInterfaceMulticall', 'Multicall2', 'ProxyAdmin', 'TickLens', 'NFTDescriptor', 'NonfungibleTokenPositionDescriptor', 'NonfungiblePositionManager', 'V3Migrator', 'QuoterV2', 'SwapRouter02', 'Permit2', 'UniversalRouter', 'UniswapV3Staker', 'Uni', 'UniswapV3Pool'] objects=['factory', 'multicall', 'multicall2', 'proxy_admin', 'tick_lens', 'nft_descriptor', 'nonfungible_token_position_descriptor', 'transparent_upgradeable_proxy', 'nonfungible_position_manager', 'v3_migrator', 'quoter', 'swap_router', 'permit_2', 'universal_router', 'staker', 'uni', 'pool']>
 
-uniswap.quoter.quoteExactInputSingle.call((tokens["WETH"], tokens["YFI"], '1 ether', 10000, 0))
+# attribute access is shorthand for objects
+pack.factory
+# <UniswapV3Factory 0x1F98431c8aD98523631AE4a59f267346ea31F984>
+
+# subscript access is shorthand for types
+pack['UniswapV3Pool']
+# <UniswapV3Pool>
+
+# you can apply types with .at(address)
+[pack['UniswapV3Pool'].at(log['pool']) for log in pack.factory.PoolCreated[:3]]
+# [<UniswapV3Pool 0x1d42064Fc4Beb5F8aAF85F4617AE8b3b5B8Bd801>, <UniswapV3Pool 0x6c6Bc977E13Df9b0de53b251522280BB72383700>, <UniswapV3Pool 0x7BeA39867e4169DBe237d55C8242a8f2fcDcc387>]
 ```
 
 ## make a dpack with ape
