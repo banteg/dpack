@@ -34,6 +34,7 @@ class DpackArtifact(BaseModel):
     @property
     def contract_type(self):
         payload = fetch_artifact(self.artifact["/"])
+        payload.setdefault("contractName", self.typename)
         return ContractType.model_validate(payload)
 
     @classmethod
