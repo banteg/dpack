@@ -1,13 +1,12 @@
 import json
 import os
 from functools import cache
-import tempfile
+from pathlib import Path
 from typing import Literal
 
 import httpx
 from ethpm_types import ContractInstance, ContractType
-from pydantic import BaseModel, Field, constr
-from pathlib import Path
+from pydantic import BaseModel, constr
 
 IPFS_RPC_URL = os.environ.get("IPFS_RPC_URL", "http://127.0.0.1:5001")
 IpfsCid = constr(pattern=r"[bB][aA][fF][yY]?\w{48,}")
@@ -16,7 +15,8 @@ IpfsCid = constr(pattern=r"[bB][aA][fF][yY]?\w{48,}")
 @cache
 def fetch_artifact(cid):
     resp = httpx.post(f"{IPFS_RPC_URL}/api/v0/cat", params={"arg": cid}).json()
-    resp["abi"] = json.loads(resp["abi"])
+    if isinstance(resp["abi"], str):
+        resp["abi"] = json.loads(resp["abi"])
     return resp
 
 
