@@ -21,6 +21,8 @@ uniswap_v3_deployment = {
     "permit_2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
     "universal_router": "0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD",
     "staker": "0xe34139463bA50bD61336E0c446Bd8C0867c6fE65",
+    "uni": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    "pool": "0x8f8EF111B67C04Eb1641f5ff19EE54Cda062f163",
 }
 
 
@@ -37,9 +39,9 @@ def main():
             pack.pack_object(path, typename=type.name, objectname=objectname, address=address)
 
     print(pack)
-    save_to = Path("examples/uniswap-v3.dpack.json")
-    save_to.write_text(pack.model_dump_json(indent=2))
-    print(f"saved to {save_to}")
+    save_path = Path("examples/uniswap-v3.dpack.json")
+    pack.save(save_path)
+    print(f"saved to {save_path}")
 
 
 if __name__ == "__main__":

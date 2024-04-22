@@ -85,6 +85,18 @@
         "/": "bafkreiej6mvcyhtkg3apj7jexpy5y64zmse4lnds53o5b5skbdmm2jpevy"
       },
       "typename": "UniswapV3Staker"
+    },
+    "Uni": {
+      "artifact": {
+        "/": "bafkreicvgwk45gdmt56fiwhyvw4tqijq6la73zr27gz2s47d3knbjhuvsm"
+      },
+      "typename": "Uni"
+    },
+    "UniswapV3Pool": {
+      "artifact": {
+        "/": "bafkreicll4d3mtce2szttnqqhrypw7dae74ic2ga5u66gxukz6mznnfkvy"
+      },
+      "typename": "UniswapV3Pool"
     }
   },
   "objects": {
@@ -207,6 +219,22 @@
       "objectname": "staker",
       "address": "0xe34139463bA50bD61336E0c446Bd8C0867c6fE65",
       "typename": "UniswapV3Staker"
+    },
+    "uni": {
+      "artifact": {
+        "/": "bafkreicvgwk45gdmt56fiwhyvw4tqijq6la73zr27gz2s47d3knbjhuvsm"
+      },
+      "objectname": "uni",
+      "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+      "typename": "Uni"
+    },
+    "pool": {
+      "artifact": {
+        "/": "bafkreicll4d3mtce2szttnqqhrypw7dae74ic2ga5u66gxukz6mznnfkvy"
+      },
+      "objectname": "pool",
+      "address": "0x8f8EF111B67C04Eb1641f5ff19EE54Cda062f163",
+      "typename": "UniswapV3Pool"
     }
   }
 }
