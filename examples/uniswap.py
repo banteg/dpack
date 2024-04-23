@@ -1,7 +1,9 @@
-import dpack
-from ape import Contract, networks
+import json
 import tempfile
 from pathlib import Path
+
+import dpack
+from ape import Contract, networks
 from rich import print
 
 # https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments
@@ -35,7 +37,11 @@ def main():
             contract = Contract(address)
             type = contract.contract_type
             path = artifacts / f"{type.name}.json"
-            path.write_text(type.model_dump_json(include={"name", "abi"}))
+            artifact = type.model_dump(include={"name", "abi"})
+            # NOTE this is initcode. the spec says it's optional but a null doesn't work with it,
+            # so we cheat a little. this bytecode is meant for deploying new contracts from type.
+            artifact["bytecode"] = "0x"
+            path.write_text(json.dumps(artifact))
             pack.pack_object(path, typename=type.name, objectname=objectname, address=address)
 
     print(pack)
