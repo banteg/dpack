@@ -1,6 +1,6 @@
 {
   "format": "dpack-1",
-  "network": "mainnet",
+  "network": "ethereum",
   "types": {
     "UniswapV3Factory": {
       "artifact": {

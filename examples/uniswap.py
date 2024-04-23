@@ -29,7 +29,8 @@ uniswap_v3_deployment = {
 
 
 def main():
-    pack = dpack.Dpack(network="mainnet")
+    # NOTE https://github.com/ricobank/dpack/blob/830ce46cc2cf6cc65888b6c9625e86d8cc9859d4/src/builder.ts#L19
+    pack = dpack.Dpack(network="ethereum")
     with tempfile.TemporaryDirectory() as artifacts:
         artifacts = Path(artifacts)
         for objectname, address in uniswap_v3_deployment.items():
