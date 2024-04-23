@@ -33,6 +33,7 @@ def test_fetch(pack):
         "Deposit(address,uint256)",
         "Withdrawal(address,uint256)",
     }
+    assert contract_type.deployment_bytecode
 
 
 def test_instance(pack):
