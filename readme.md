@@ -78,7 +78,7 @@ this library also provides an easy wrapper that loads up objects as ape contract
 
 `types` are exposed as a provider-aware wrapper [ContractContainer](https://github.com/ApeWorX/ape/blob/c2f1bc48c1afe3297a63e4e820dbfb751b90c932/src/ape/contracts/base.py#L1238). `objects` are ready-to-use [ContractInstance](https://github.com/ApeWorX/ape/blob/c2f1bc48c1afe3297a63e4e820dbfb751b90c932/src/ape/contracts/base.py#L815).
 
-types can be also accessed with a subscript shorthand like `pack["MyType"]`. you can an address to a type with `.at(address)`, which returns a `ContractInstance`.
+types can be also accessed with a subscript shorthand like `pack["MyType"]`. you can cast an address to a type with `.at(address)`, which returns a `ContractInstance`.
 
 objects can be also accessed with an attribute shorthand like `pack.my_contract`.
 

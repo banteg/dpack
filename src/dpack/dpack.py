@@ -6,7 +6,7 @@ from typing import Literal
 
 import httpx
 from ethpm_types import ContractInstance, ContractType
-from pydantic import BaseModel, constr
+from pydantic import BaseModel, constr, field_validator
 
 IPFS_RPC_URL = os.environ.get("IPFS_RPC_URL", "http://127.0.0.1:5001")
 IpfsCid = constr(pattern=r"[bB][aA][fF][yY]?\w{48,}")
@@ -70,6 +70,13 @@ class Dpack(BaseModel):
     network: str
     types: dict[str, DpackType] = {}
     objects: dict[str, DpackObject] = {}
+
+    @field_validator("network")
+    @classmethod
+    def validate_network(cls, v: str):
+        if v == "mainnet":
+            raise ValueError(f'"{v}" is an ambiguous network name. perhaps you meant "ethereum".')
+        return v
 
     def __getattr__(self, name):
         if name in self.objects:

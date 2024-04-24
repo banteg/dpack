@@ -84,3 +84,9 @@ def test_builder_chaining(pack):
         )
     )
     assert built.model_dump() == pack.model_dump()
+
+
+def test_network_constraint():
+    # https://github.com/ricobank/dpack/blob/830ce46cc2cf6cc65888b6c9625e86d8cc9859d4/src/builder.ts#L19
+    with pytest.raises(ValueError):
+        dpack.Dpack(network="mainnet")
